@@ -1,14 +1,21 @@
-
+import asyncio
+import discord
+import requests
+import os
+from discord.ext import commands
+from PIL import Image
 import asyncio
 import os
 import openai
 import discord
+import requests
 from discord.ext import commands
 import datetime
 from typing import Optional
 from discord import TextChannel
 import re
 from discord.ext.commands import Greedy
+from discord.ext.commands import UserConverter
 
 openai_api_key = None
 openai.api_key = "YOUR_OPENAI_API_KEY"
@@ -16,7 +23,7 @@ intents = discord.Intents.default()
 intents.messages = True
 intents.message_content = True
 
-bot = commands.Bot(command_prefix="!!", intents=intents)
+bot = commands.Bot(command_prefix="!!", intents=intents,help_command=None)
 
 
 def timeframe_to_seconds(timeframe):
@@ -68,7 +75,7 @@ async def get_summary(ctx, timeframe):
 
     if openai_api_key is None:
         await ctx.send(
-            "What you think this is free? Set the OpenAI API key with the command `!!setapikey YOUR_API_KEY` before using this command.")
+            "What you think this is free? Set the OpenAI API key with the command `!!setapikey YOUR_API_KEY`")
         return None
 
     messages = await get_messages_in_timeframe(ctx.channel, timeframe)
@@ -161,9 +168,106 @@ async def generate_nickname_command(ctx, input_string: str):
     await ctx.send(f"{user.display_name}? more like {nickname}")
 
 
+# Function to generate image from text
+async def create_image(text):
+    image_path = 'generated_image.png'
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {openai_api_key}',
+    }
+    data = {
+        'prompt': text,
+        'n': 1,
+        'size': '256x256',
+    }
+    response = requests.post('https://api.openai.com/v1/images/generations', headers=headers, json=data)
+    response.raise_for_status()
+    image_url = response.json()['data'][0]['url']
+
+    with open(image_path, 'wb') as f:
+        f.write(requests.get(image_url).content)
+
+    return image_path
+
+
+# Listen for "visualize" command
+@bot.command(name='visualize')
+async def visualize(ctx, *, text):
+    image_path = await create_image(text)
+    with open(image_path, 'rb') as img_file:
+        # Create and send Discord file
+        discord_file = discord.File(fp=img_file, filename='visualized_text.png')
+        await ctx.send(file=discord_file)
+
+    # Remove the generated image file
+    os.remove(image_path)
+
 @bot.event
 async def on_ready():
     print(f"{bot.user.name} is connected to Discord!")
 
 
+async def generate_playful_response(messages):
+    prompt = f"Based on the following messages, make a playful and light-hearted joke about the user:\n\n{messages}\n\nJoke:"
+
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=50,
+        n=1,
+        stop=None,
+        temperature=0.7,
+    )
+
+    joke = response.choices[0].text.strip()
+    return joke
+
+
+class DisplayNameMemberConverter(commands.MemberConverter):
+    async def convert(self, ctx, argument):
+        for member in ctx.guild.members:
+            if member.display_name.lower() == argument.lower():
+                return member
+        raise commands.MemberNotFound(argument)
+
+
+@bot.command(name='roast')
+async def roast(ctx, *, user_name: str):
+    try:
+        user = await DisplayNameMemberConverter().convert(ctx, user_name)
+    except commands.MemberNotFound:
+        await ctx.send(f"User {user_name} not found.")
+        return
+
+    messages = []
+    async for message in ctx.channel.history(limit=1000):
+        if message.author == user:
+            messages.append(message.content)
+
+    if not messages:
+        await ctx.send(f"I couldn't find any messages from {user.mention}.")
+        return
+
+    # Combine last 40 messages or less
+    messages = "\n".join(messages[:40])
+
+    joke = await generate_playful_response(messages)
+    await ctx.send(joke)
+
+# Help command
+@bot.command(name="help")
+async def help_command(ctx):
+    embed = discord.Embed(
+        title="Help",
+        description="List of commands available:",
+        color=0x00FF00,
+    )
+
+    embed.add_field(name="!!setapikey <api_key>", value="Set the OpenAI API key.", inline=False)
+    embed.add_field(name="!!whatsbeengoingoninthepast <timeframe>", value="Get a summary of the conversation in the past specified timeframe.", inline=False)
+    embed.add_field(name="!!generate_nickname <input_string>", value="Generate a relevant Discord nickname for a user based on their message history.", inline=False)
+    embed.add_field(name="!!visualize <text>", value="Generate an image from the provided text.", inline=False)
+    embed.add_field(name="!!roast <user_name>", value="Roasts user based on their last 40 messages", inline=False)
+
+    await ctx.send(embed=embed)
 bot.run("YOUR_BOT_TOKEN")
