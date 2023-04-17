@@ -262,4 +262,5 @@ async def help_command(ctx):
     await ctx.send(embed=embed)
 
 
-bot.run("MTA5NTgwNTk0MjMwMzU2ODAxMw.G1jNLS.bSP5k0FGzLW8cXjVUOYxIB8Ce5wMf0vmsukcFw")
+bot.run("your discord bot token here")
+
