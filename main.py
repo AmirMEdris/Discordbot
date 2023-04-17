@@ -1,29 +1,22 @@
 import asyncio
-import discord
-import requests
-import os
-from discord.ext import commands
-from PIL import Image
-import asyncio
-import os
-import openai
-import discord
-import requests
-from discord.ext import commands
 import datetime
-from typing import Optional
-from discord import TextChannel
+import os
 import re
-from discord.ext.commands import Greedy
-from discord.ext.commands import UserConverter
+
+import discord
+import openai
+import requests
+from discord.ext import commands
 
 openai_api_key = None
 openai.api_key = "YOUR_OPENAI_API_KEY"
 intents = discord.Intents.default()
 intents.messages = True
 intents.message_content = True
+intents.members = True
 
-bot = commands.Bot(command_prefix="!!", intents=intents,help_command=None)
+bot = commands.Bot(command_prefix='!!', intents=intents)
+bot = commands.Bot(command_prefix="!!", intents=intents, help_command=None)
 
 
 def timeframe_to_seconds(timeframe):
@@ -31,19 +24,11 @@ def timeframe_to_seconds(timeframe):
         return None
 
     time_unit = timeframe[-1].lower()
-    time_value = int(timeframe[:-1])
-    if time_unit == "h":
-        return time_value * 3600
-    elif time_unit == "d":
-        return time_value * 86400
-    elif time_unit == "w":
-        return time_value * 604800
-    elif time_unit == "m":
-        return time_value * 2592000
-    elif time_unit == "y":
-        return time_value * 31536000
-    else:
+    #turn this if else ladder into a dictionary
+    if time_unit not in ["h", "d", "w", "m", "y"]:
         return None
+    d = {"h": 3600, "d": 86400, "w": 604800, "m": 2592000, "y": 31536000}
+    return int(timeframe[:-1]) * d[time_unit]
 
 
 @bot.command(name="setapikey")
@@ -127,9 +112,6 @@ async def generate_nickname(message_text):
     return nickname
 
 
-from discord import TextChannel
-
-
 @bot.command(name="generate_nickname")
 async def generate_nickname_command(ctx, input_string: str):
     # Extract the channel mention (if any) using a regular expression
@@ -202,18 +184,20 @@ async def visualize(ctx, *, text):
     # Remove the generated image file
     os.remove(image_path)
 
+
 @bot.event
 async def on_ready():
     print(f"{bot.user.name} is connected to Discord!")
 
 
-async def generate_playful_response(messages):
-    prompt = f"Based on the following messages, make a playful and light-hearted joke about the user:\n\n{messages}\n\nJoke:"
+async def generate_roast(user_name, messages):
+    prompt = f"Based on these messages from {user_name}, create a funny and playful roast remember to exclude any " \
+             f"names mention and focus on topics:\n{messages}\nRoast:"
 
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=prompt,
-        max_tokens=50,
+        max_tokens=150,
         n=1,
         stop=None,
         temperature=0.7,
@@ -234,13 +218,15 @@ class DisplayNameMemberConverter(commands.MemberConverter):
 @bot.command(name='roast')
 async def roast(ctx, *, user_name: str):
     try:
+        # await ctx.send([member.display_name for member in ctx.guild.members])
         user = await DisplayNameMemberConverter().convert(ctx, user_name)
+
     except commands.MemberNotFound:
         await ctx.send(f"User {user_name} not found.")
         return
 
     messages = []
-    async for message in ctx.channel.history(limit=1000):
+    async for message in ctx.channel.history(limit=40):
         if message.author == user:
             messages.append(message.content)
 
@@ -251,8 +237,9 @@ async def roast(ctx, *, user_name: str):
     # Combine last 40 messages or less
     messages = "\n".join(messages[:40])
 
-    joke = await generate_playful_response(messages)
+    joke = await generate_roast(user_name, messages)
     await ctx.send(joke)
+
 
 # Help command
 @bot.command(name="help")
@@ -264,10 +251,15 @@ async def help_command(ctx):
     )
 
     embed.add_field(name="!!setapikey <api_key>", value="Set the OpenAI API key.", inline=False)
-    embed.add_field(name="!!whatsbeengoingoninthepast <timeframe>", value="Get a summary of the conversation in the past specified timeframe.", inline=False)
-    embed.add_field(name="!!generate_nickname <input_string>", value="Generate a relevant Discord nickname for a user based on their message history.", inline=False)
+    embed.add_field(name="!!whatsbeengoingoninthepast <timeframe>",
+                    value="Get a summary of the conversation in the past specified timeframe.", inline=False)
+    embed.add_field(name="!!generate_nickname <input_string>",
+                    value="Generate a relevant Discord nickname for a user based on their message history.",
+                    inline=False)
     embed.add_field(name="!!visualize <text>", value="Generate an image from the provided text.", inline=False)
     embed.add_field(name="!!roast <user_name>", value="Roasts user based on their last 40 messages", inline=False)
 
     await ctx.send(embed=embed)
-bot.run("YOUR_BOT_TOKEN")
+
+
+bot.run("MTA5NTgwNTk0MjMwMzU2ODAxMw.G1jNLS.bSP5k0FGzLW8cXjVUOYxIB8Ce5wMf0vmsukcFw")
