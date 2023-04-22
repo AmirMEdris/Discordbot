@@ -25,4 +25,4 @@ async def on_ready():
     print(f"{bot.user.name} is online.")
     await bot.add_cog(Summary(bot, openai.api_key))
 
-bot.run("your token here")
+bot.run("")

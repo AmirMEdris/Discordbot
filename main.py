@@ -226,7 +226,7 @@ async def roast(ctx, *, user_name: str):
         return
 
     messages = []
-    async for message in ctx.channel.history(limit=40):
+    async for message in ctx.channel.history(limit=1000):
         if message.author == user:
             messages.append(message.content)
 
@@ -247,8 +247,7 @@ async def help_command(ctx):
     embed = discord.Embed(
         title="Help",
         description="List of commands available:",
-        color=0x00FF00,
-    )
+        color=0x00FF00,)
 
     embed.add_field(name="!!setapikey <api_key>", value="Set the OpenAI API key.", inline=False)
     embed.add_field(name="!!whatsbeengoingoninthepast <timeframe>",
@@ -262,5 +261,5 @@ async def help_command(ctx):
     await ctx.send(embed=embed)
 
 
-bot.run("your discord bot token here")
+bot.run("")
 
