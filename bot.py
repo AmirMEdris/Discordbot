@@ -1,12 +1,7 @@
 # Alternative to using main.py to make the code less cluttered and more readable
-# currently only summary works but all the cogs are successfully loaded
+# currently works as intended but main.py is still there just in case
 
-# import discord
-# from discord.ext import commands
-# import openai
-# # from config import openai_api_key, discord_bot_token
-# from modules.summary import Summary
-#     # , nickname, visualize, roast, help
+
 import discord
 from discord.ext import commands
 import openai
