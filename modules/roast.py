@@ -13,7 +13,7 @@ class Roast(commands.Cog):
         print("Roast cog initialized")
 
     async def generate_roast(self, user_name, messages):
-        prompt = f"Based on these messages from {user_name}, create a funny and playful roast remember to exclude any " \
+        prompt = f"Based on these messages from {user_name}, create a funny roast remember to exclude any " \
                  f"names mention and focus on topics:\n{messages}\nRoast:"
 
         response = openai.Completion.create(
