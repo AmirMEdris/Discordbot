@@ -19,7 +19,7 @@ async def on_ready():
 
 
 client.run("")
-# bot = interactions.Client(token="MTA5NTgwNTk0MjMwMzU2ODAxMw.GJRv4W.kYvz79vdc7jZsF949fLEvAXc5GHz9CmLVUbRUQ")
+# bot = interactions.Client(token="")
 # bot = interactions.Client(
 #     token=""
 # )
