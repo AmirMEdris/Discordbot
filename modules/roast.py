@@ -35,6 +35,10 @@ class Roast(commands.Cog):
                     return member
             raise commands.MemberNotFound(argument)
 
+    # @bot.command(
+    #     name="my_first_command",
+    #     description="This is the first command I made!",
+    # )
     @commands.command(name='roast')
     async def roast(self, ctx, *, user_name: str):
         try:

@@ -1,9 +1,6 @@
-# Alternative to using main.py to make the code less cluttered and more readable
-# currently works as intended but main.py is still there just in case
-
-
 import discord
 from discord.ext import commands
+import interactions
 import openai
 from modules.summary import Summary
 from modules.nickname import Nickname
@@ -30,4 +27,9 @@ async def on_ready():
     await bot.add_cog(Roast(bot, openai.api_key))
 
 
+# async def my_first_command(ctx: interactions.CommandContext):
+#     await ctx.send("Hi there!")
+
+
 bot.run("")
+

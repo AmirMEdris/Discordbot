@@ -61,7 +61,7 @@ class Summary(commands.Cog):
         return summary
 
     @commands.command(name="whatsbeengoingoninthepast")
-    async def whatsbeengoingoninthepast(self, ctx, timeframe: str):
+    async def whatsbeengoingoninthepast(self, ctx,  timeframe: str):
         if self.timeframe_to_seconds(timeframe) is None:
             await ctx.send("Invalid timeframe format. Please use a number followed by h, d, w, m, or y.")
             return
