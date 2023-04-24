@@ -1,21 +1,29 @@
-import discord
-from discord.ext import commands
-import interactions
+import yaml
 import openai
+import discord
 from modules.summary import Summary
+from discord.ext import commands
 from modules.nickname import Nickname
 from modules.visualize import Visualize
 from modules.roast import Roast
 from modules.help import Help
 
-openai.api_key = ""
+# Read config.yaml and get the openai_key and bot_token
+with open("config.yaml", "r") as file:
+    config_data = yaml.safe_load(file)
+
+openai_key = config_data.get("openai_key")
+bot_token = config_data.get("bot_token")
+
+# Set OpenAI API key
+openai.api_key = openai_key
+
 intents = discord.Intents.default()
 intents.messages = True
 intents.message_content = True
 intents.members = True
 
 bot = commands.Bot(command_prefix="!!", intents=intents, help_command=None)
-
 
 @bot.event
 async def on_ready():
@@ -26,10 +34,5 @@ async def on_ready():
     await bot.add_cog(Visualize(bot, openai.api_key))
     await bot.add_cog(Roast(bot, openai.api_key))
 
-
-# async def my_first_command(ctx: interactions.CommandContext):
-#     await ctx.send("Hi there!")
-
-
-bot.run("")
+bot.run(bot_token)
 
