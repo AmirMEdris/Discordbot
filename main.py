@@ -1,6 +1,14 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
+import json
+
+# Load the JSON data from the file
+with open('config.json', 'r') as f:
+    json_data = json.load(f)
+
+# Access the value of the 'token' key
+token = json_data['token']
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
