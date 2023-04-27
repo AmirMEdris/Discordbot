@@ -29,17 +29,15 @@ Create a new bot on the Discord Developer Portal and get the bot token.
 
 Create a config.yaml file in the project directory and add your OpenAI API key and Discord bot token:
 
-yaml
-Copy code
 openai_key: YOUR_OPENAI_API_KEY
 bot_token: YOUR_DISCORD_BOT_TOKEN
+
 Invite the bot to your Discord server using the link provided in the Discord Developer Portal.
 
-Run main.py:
+Run bot.py:
 
-css
-Copy code
-python main.py
+python bot.py
+
 Your AI-Powered Discord bot is now ready to use on your server!
 
 Usage
