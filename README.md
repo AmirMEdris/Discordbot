@@ -1,27 +1,28 @@
 # Discordbot
-This AI-powered Discord bot provides a variety of entertaining and useful features to enhance your Discord server experience. Built using Python, discord.py library, and the OpenAI API, this bot offers a lighthearted roast command, a conversation summarizing command, and more.
+After seeing tons of diffent applications using gpt 4 I thought that a discord bot that uses ai for its commands would be fun. Built using Python, discord.py library, and the OpenAI API. I talk about it more here[https://medium.com/@amiredris25/making-a-discord-bot-that-uses-gpt-and-dalle-2-a0c6c4b80ce8]
 
 Features
+Help: Shows all available functions and provides a description.
 Roast: Generates a funny roast based on a user's message history.
 Summarize: Condenses conversations within a specified timeframe, making it easy to catch up on missed discussions.
 More features can be added in the future.
+Visualize: Takes in prompt from user and uses dalle-2 to make an image and send it to chat.
+Nickname: Looks through a users messages and makes a new name based off their chat and sends it.
+
+
 Getting Started
 Follow these instructions to set up the AI-Powered Discord bot on your own server.
 
 Prerequisites
-Python 3.6 or higher
+Python 3.9 or higher
 discord.py library
 OpenAI API key
 A Discord server to host the bot
 Installation
 Clone the repository:
-
-bash
-Copy code
 git clone https://github.com/AmirMEdris/Discordbot.git
-Install the required dependencies:
 
-Copy code
+Install the required dependencies:
 pip install -r requirements.txt
 Obtain an OpenAI API key by signing up for an account at https://beta.openai.com/signup/.
 
@@ -41,8 +42,8 @@ python bot.py
 Your AI-Powered Discord bot is now ready to use on your server!
 
 Usage
-Use the !!roast @username command to generate a roast for a specific user.
-Use the !!summarize [timeframe] command to summarize conversations within a specified timeframe.
+Once active use !!help in a chat with the bot in it and it will show you all the commands and their usage.
+
 Contributing
 This project is open source and contributions are welcome. Feel free to fork the repository, create new features or improve existing ones, and submit a pull request.
 
