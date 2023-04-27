@@ -1,4 +1,3 @@
-import yaml
 import openai
 import discord
 from modules.summary import Summary
@@ -7,16 +6,15 @@ from modules.nickname import Nickname
 from modules.visualize import Visualize
 from modules.roast import Roast
 from modules.help import Help
+import yaml
 
 # Read config.yaml and get the openai_key and bot_token
 with open("config.yaml", "r") as file:
     config_data = yaml.safe_load(file)
 
-openai_key = config_data.get("openai_key")
-bot_token = config_data.get("bot_token")
-
 # Set OpenAI API key
-openai.api_key = openai_key
+openai.api_key = config_data.get("openai_key")
+bot_token = config_data.get("bot_token")
 
 intents = discord.Intents.default()
 intents.messages = True
