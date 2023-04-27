@@ -1,5 +1,5 @@
 # Discordbot
-After seeing tons of diffent applications using gpt 4 I thought that a discord bot that uses ai for its commands would be fun. Built using Python, discord.py library, and the OpenAI API. I talk about it more here[https://medium.com/@amiredris25/making-a-discord-bot-that-uses-gpt-and-dalle-2-a0c6c4b80ce8]
+After seeing tons of diffent applications using gpt 4 I thought that a discord bot that uses ai for its commands would be fun. Built using Python, discord.py library, and the OpenAI API. I talk about it more here: https://medium.com/@amiredris25/making-a-discord-bot-that-uses-gpt-and-dalle-2-a0c6c4b80ce8 
 
 Features
 Help: Shows all available functions and provides a description.
@@ -43,6 +43,14 @@ Your AI-Powered Discord bot is now ready to use on your server!
 
 Usage
 Once active use !!help in a chat with the bot in it and it will show you all the commands and their usage.
+To-Do:
+ - Use /commands instead of !!
+ - Replace visualize with a free alternative. 
+ - Make Summary do a better job when its long intervals of time
+ - Add arguements like channel name for applicable functions
+ - Come up with more useful methods.
+ - Give messages explaining what went wrong when outputs wont be generated cause of openai content filtering.
+ - make readme better
 
 Contributing
 This project is open source and contributions are welcome. Feel free to fork the repository, create new features or improve existing ones, and submit a pull request.
