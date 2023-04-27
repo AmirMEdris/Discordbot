@@ -19,7 +19,6 @@ class Help(commands.Cog):
             description="List of commands available:",
             color=0x00FF00,)
 
-        embed.add_field(name="!!setapikey <api_key>", value="Set the OpenAI API key.", inline=False)
         embed.add_field(name="!!whatsbeengoingoninthepast <timeframe>",
                         value="Get a summary of the conversation in the past specified timeframe.", inline=False)
         embed.add_field(name="!!generate_nickname <input_string>",
