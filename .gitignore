@@ -1,4 +1,4 @@
 config.yaml
 ./idea/
 testing.py
-./idea
+/idea/*
