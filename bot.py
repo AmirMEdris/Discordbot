@@ -31,6 +31,6 @@ async def on_ready():
     await bot.add_cog(Nickname(bot, openai.api_key))
     await bot.add_cog(Visualize(bot, openai.api_key))
     await bot.add_cog(Roast(bot, openai.api_key))
-
+#add speaking function using eleven labs
 bot.run(bot_token)
 
