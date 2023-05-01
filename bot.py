@@ -32,5 +32,6 @@ async def on_ready():
     await bot.add_cog(Visualize(bot, openai.api_key))
     await bot.add_cog(Roast(bot, openai.api_key))
 #add speaking function using elevenlabs
+#add hugging gpt models that you chose
 bot.run(bot_token)
 
