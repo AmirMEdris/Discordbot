@@ -45,3 +45,4 @@ class Visualize(commands.Cog):
 
         # Remove the generated image file
         os.remove(image_path)
+##implemeted free version of visualize
