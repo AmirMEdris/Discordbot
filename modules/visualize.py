@@ -3,40 +3,32 @@ import os
 
 import discord
 import requests
+import torch
+from diffusers import StableDiffusionPipeline
 from discord.ext import commands
 import openai
 import datetime
 
 
 class Visualize(commands.Cog):
-    def __init__(self, bot, openai_api_key):
+    def __init__(self, bot):
         self.bot = bot
-        self.openai_api_key = openai_api_key
         print("Visualize cog initialized")
+        self.model_id = "dreamlike-art/dreamlike-photoreal-2.0"
+        self.pipe = StableDiffusionPipeline.from_pretrained(self.model_id, torch_dtype=torch.float16)
+        self.pipe = self.pipe.to("cuda")
 
     async def create_image(self, text):
         image_path = 'generated_image.png'
-        headers = {
-            'Content-Type': 'application/json',
-            'Authorization': f'Bearer {self.openai_api_key}',
-        }
-        data = {
-            'prompt': text,
-            'n': 1,
-            'size': '256x256',
-        }
-        response = requests.post('https://api.openai.com/v1/images/generations', headers=headers, json=data)
-        response.raise_for_status()
-        image_url = response.json()['data'][0]['url']
+        prompt = text
+        image = self.pipe(prompt).images[0]
 
-        with open(image_path, 'wb') as f:
-            f.write(requests.get(image_url).content)
-
+        image.save(image_path)
         return image_path
 
     # Listen for "visualize" command
     @commands.command(name='visualize')
-    async def visualize(self, ctx, *, text):
+    async def visualizefree(self, ctx, *, text):
         image_path = await self.create_image(text)
         with open(image_path, 'rb') as img_file:
             # Create and send Discord file
@@ -45,4 +37,3 @@ class Visualize(commands.Cog):
 
         # Remove the generated image file
         os.remove(image_path)
-##implemeted free version of visualize
