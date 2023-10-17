@@ -6,7 +6,7 @@ from modules.nickname import Nickname
 from modules.visualize import Visualize
 from modules.roast import Roast
 from modules.help import Help
-from modules.visualizefree import VisualizeFree
+# from modules.visualizefree import VisualizeFree
 import yaml
 
 # Read config.yaml and get the openai_key and bot_token
@@ -32,7 +32,7 @@ async def on_ready():
     await bot.add_cog(Nickname(bot, openai.api_key))
     await bot.add_cog(Visualize(bot, openai.api_key))
     await bot.add_cog(Roast(bot, openai.api_key))
-    await bot.add_cog(VisualizeFree(bot))
+    # await bot.add_cog(VisualizeFree(bot))
 #add speaking function using elevenlabs
 #add hugging gpt models that you chose
 bot.run(bot_token)
